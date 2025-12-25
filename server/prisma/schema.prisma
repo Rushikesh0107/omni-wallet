@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  password        String
+  benificiaries   Beneficiary[]
+  transactions    Transaction[]
+  cardInstruments CardInstrument[]
+  upiInstruments  UpiInstrument[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([id])
+}
+
+model CardInstrument {
+  id     String @id @default(uuid())
+  userId String
+
+  cardType    CardType
+  bankName    String
+  fullName    String
+  cardNumber  String
+  expiryMonth String
+  expiryYear  String
+  cvv         String
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId])
+}
+
+model UpiInstrument {
+  id     String @id @default(uuid())
+  userId String
+
+  upiId    String
+  upiName  String
+  upiPhone String
+  qrCode   String?
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId])
+}
+
+model Beneficiary {
+  id           String        @id @default(uuid())
+  userId       String
+  name         String
+  phoneNumber  String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Transaction {
+  id               String            @id @default(uuid())
+  userId           String
+  amount           Decimal           @db.Decimal(12, 2)
+  status           TransactionStatus
+  beneficiaryId    String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  cardInstrumentId String?
+  upiInstrumentId  String?
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+
+  cardInstrument CardInstrument? @relation(fields: [cardInstrumentId], references: [id], onDelete: Cascade)
+  upiInstrument  UpiInstrument?  @relation(fields: [upiInstrumentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+enum CardType {
+  CREDIT
+  DEBIT
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
