@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/input-group";
 import { SearchIcon } from "lucide-react";
 import Link from "next/link";
+import BeneficiarySearch from "./beneficiary-search";
 
 const TransactionTools = () => {
   return (
@@ -14,15 +15,13 @@ const TransactionTools = () => {
         <Link href="/add-beneficiary">
           <Button variant={"outline"}>Add Beneficiary</Button>
         </Link>
+        <Link href="/transactions">
+          <Button variant={"outline"}>Transactions</Button>
+        </Link>
       </div>
 
       <div className="mt-5 md:mt-0">
-        <InputGroup className="bg-white">
-          <InputGroupInput placeholder="Search..." />
-          <InputGroupAddon>
-            <SearchIcon />
-          </InputGroupAddon>
-        </InputGroup>
+        <BeneficiarySearch />
       </div>
     </div>
   );

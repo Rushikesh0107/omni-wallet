@@ -19,7 +19,7 @@ const Header: React.FC = () => {
             variant={"outline"}
             className="hover:bg-black/5 hover:text-black"
           >
-            Send Money
+            Beneficiaries
           </Button>
         </Link>
       </div>
