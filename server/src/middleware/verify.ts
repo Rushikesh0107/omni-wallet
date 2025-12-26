@@ -18,7 +18,13 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     };
     req.userId = data.userId;
     next();
-  } catch (e) {}
+  } catch (e) {
+    return res.status(401).json({
+      message: "Unauthorized",
+      data: null,
+      success: false,
+    } as APIResponse);
+  }
 };
 
 export { verifyToken };

@@ -31,6 +31,21 @@ const addCard = async (req: Request, res: Response) => {
       } as APIResponse);
     }
 
+    const cardExists = await prisma.cardInstrument.findFirst({
+      where: {
+        cardNumber,
+        userId: req.userId,
+      },
+    });
+
+    if (cardExists) {
+      return res.status(400).json({
+        message: "Card already exists",
+        data: null,
+        success: false,
+      } as APIResponse);
+    }
+
     const card = await prisma.cardInstrument.create({
       data: {
         bankName: bankName,

@@ -43,6 +43,7 @@ model CardInstrument {
   transactions Transaction[]
 
   @@index([userId])
+  @@index([cardNumber])
 }
 
 model UpiInstrument {
@@ -58,6 +59,7 @@ model UpiInstrument {
   transactions Transaction[]
 
   @@index([userId])
+  @@index([upiId])
 }
 
 model Beneficiary {
