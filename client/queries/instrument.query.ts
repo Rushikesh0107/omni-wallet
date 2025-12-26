@@ -1,17 +1,28 @@
+"use client";
+
 import { instrumentService } from "@/services/instrument.service";
 import { ApiError } from "@/types/api";
-import { Card } from "@/types/card";
-import { useMutation } from "@tanstack/react-query";    
+import { CardPayload } from "@/types/card";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useAddCard = () =>
-  useMutation<unknown, ApiError, Card>({
+export const useAddCard = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<unknown, ApiError, CardPayload>({
     mutationKey: ["add-card"],
     mutationFn: instrumentService.addCard,
-    onSuccess : () => {
-        toast.success("Card added successfully");
+
+    onSuccess: () => {
+      toast.success("Card added successfully");
+
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
     },
-    onError : () => {
-        toast.error("Something went wrong");
-    }
+
+    onError: (error) => {
+      toast.error(error?.message ?? "Something went wrong");
+    },
   });
+};
