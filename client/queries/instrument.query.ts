@@ -3,6 +3,7 @@
 import { instrumentService } from "@/services/instrument.service";
 import { ApiError } from "@/types/api";
 import { CardPayload } from "@/types/card";
+import { UpiPayload } from "@/types/upi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -26,3 +27,24 @@ export const useAddCard = () => {
     },
   });
 };
+
+export const useAddUpi = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<unknown, ApiError, UpiPayload>({
+      mutationKey: ["add-upi"],
+      mutationFn: instrumentService.addUpi,
+
+      onSuccess: () => {
+        toast.success("UPI added successfully");
+
+        queryClient.invalidateQueries({
+          queryKey: ["user"],
+        });
+      },
+
+      onError: (error) => {
+        toast.error(error?.message ?? "Something went wrong");
+      },
+    });
+  };

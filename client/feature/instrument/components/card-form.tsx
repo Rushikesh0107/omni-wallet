@@ -102,6 +102,11 @@ const CardForm = ({ type }: { type: string }) => {
                       aria-invalid={
                         form.formState.errors.bankName ? true : false
                       }
+                      onChange={(e) => {
+                        field.onChange(
+                          e.target.value.replace(/[^a-zA-Z ]/g, "")
+                        );
+                      }}
                     />
                     {form.formState.errors.bankName && (
                       <FieldError errors={[form.formState.errors.bankName]} />

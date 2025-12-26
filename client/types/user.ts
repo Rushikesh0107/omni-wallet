@@ -1,16 +1,5 @@
 import { CardInstrument } from "./card";
-
-/**
- * UPI instrument (currently empty in your response,
- * but defined for future extensibility)
- */
-export type UPIInstrument = {
-  id: string;
-  userId: string;
-  upiId: string;
-  provider?: string;
-  createdAt: string;
-};
+import { UPIInstrument } from "./upi";
 
 /**
  * User domain model

@@ -8,7 +8,7 @@ const AddInstrument = () => {
     const searchParams = useSearchParams();
     const type = searchParams.get("type");
     return (
-        <div className="flex items-center justify-center h-screen p-4 md:p-0">
+        <div className="flex md:items-center justify-center h-screen p-4 md:p-0">
             <Render if={type === "credit-card" || type === "debit-card"}>
                 {type &&<CardForm type={type}/>}
             </Render>
