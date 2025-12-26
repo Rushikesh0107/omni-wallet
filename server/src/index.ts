@@ -39,14 +39,14 @@ app.use("/api/user", userRouter);
 
 async function startServer() {
   try {
-    // Wait for DB to connect first
+   
     await connectDB();
 
-    const server = app.listen(process.env.PORT || 3000, () => {
+    const server = app.listen(process.env.PORT || 8080, () => {
       console.log(`Server started on port ${process.env.PORT || 3000}`);
     });
 
-    // Graceful shutdown
+    
     const shutdown = async (code: number) => {
       console.log("Shutting down server...");
       server.close(async () => {
@@ -75,7 +75,6 @@ async function startServer() {
   }
 }
 
-// Start everything
 startServer();
 
 export default app;

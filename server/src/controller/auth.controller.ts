@@ -87,7 +87,12 @@ const register = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(200).json({
+    const token = jwt.sign({userId : newUser.id}, process.env.JWT_SECRET || "secret", {expiresIn : "1hr"})
+
+    return res
+    .status(200)
+    .cookie( "token" ,token, {httpOnly : true})
+    .json({
       message: "User created successfully",
       data: newUser,
       success: true,
