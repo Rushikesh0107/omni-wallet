@@ -3,9 +3,9 @@
 import { CardPreview } from "@/components/common/card-preview";
 import UpiPreview from "@/components/common/upi-preview";
 import { useGetUser } from "@/queries/user.query";
-
+  
 const InstrumentList = () => {
-  const { data: user, isLoading, error } = useGetUser();
+  const { data: user } = useGetUser();
 
   const cardInstruments = user?.cardInstruments;
   const upiInstruments = user?.upiInstruments;

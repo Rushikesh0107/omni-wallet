@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     cardPreview: cardPreviewReducer,
     beneficiary: beneficiaryReducer,
-    transaction: transactionReducer
+    transaction: transactionReducer,
   },
 });
 

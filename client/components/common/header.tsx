@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 
 const Header: React.FC = () => {
   return (
-    <header className="w-full border-b bg-white py-4 shadow-sm">
+    <header className="w-full border-b bg-white py-4 shadow-sm sticky top-0">
       <div className="flex items-center justify-between px-4 sm:px-8">
         <div className="flex items-center">
           <Link href="/">

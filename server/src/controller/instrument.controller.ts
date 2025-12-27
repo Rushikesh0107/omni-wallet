@@ -85,7 +85,6 @@ const addUPI = async (req: Request, res: Response) => {
   try {
     const { upiId, upiName, upiPhone } = req.body;
 
-    // 1. Validate input
     if (!upiId || !upiName || !upiPhone) {
       return res.status(400).json({
         message: "upiId, upiName and upiPhone are required",
@@ -94,7 +93,6 @@ const addUPI = async (req: Request, res: Response) => {
       } as APIResponse);
     }
 
-    // 2. Ensure user exists (safety)
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
     });
@@ -107,15 +105,11 @@ const addUPI = async (req: Request, res: Response) => {
       } as APIResponse);
     }
 
-    // 3. Generate UPI payment payload (STANDARD FORMAT)
     const upiPayload = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(
       upiName
     )}&cu=INR`;
-
-    // 4. Generate QR code (base64 PNG)
     const qrCode = await QRCode.toDataURL(upiPayload);
 
-    // 5. Store UPI instrument
     const upiInstrument = await prisma.upiInstrument.create({
       data: {
         upiId,
@@ -126,7 +120,6 @@ const addUPI = async (req: Request, res: Response) => {
       },
     });
 
-    // 6. Return response (NO PII LEAK)
     return res.status(201).json({
       message: "UPI added successfully",
       data: {

@@ -26,7 +26,7 @@ const TransactionList = () => {
     const maskCard = (num: string) => `•••• ${num.slice(-4)}`;
 
     return (
-        <div className="w-full mx-auto p-6">
+        <div className="w-full mx-auto md:p-6">
             <div className="space-y-3">
                 {isLoading && (
                     <div className="text-center py-10 text-slate-500 animate-pulse">

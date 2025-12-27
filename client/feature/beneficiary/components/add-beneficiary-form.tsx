@@ -42,7 +42,7 @@ const AddBeneficiaryForm = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-5 max-w-4xl mx-auto w-full">
+    <div className="flex flex-col md:flex-row gap-5 max-w-4xl mx-auto w-full p-5 md:p-0">
       <div className="max-w-md w-full mx-auto p-6 bg-white rounded-xl shadow-sm border border-slate-200">
         <h1 className="text-2xl font-bold mb-4">Add Beneficiary</h1>
         <Form {...form}>

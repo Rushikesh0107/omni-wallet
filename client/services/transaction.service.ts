@@ -1,6 +1,6 @@
 // transaction.service.ts
 import { http } from "@/lib/http";
-import { Transaction } from "@/types/transaction";
+import { PayNowPayload, Transaction } from "@/types/transaction";
 
 export const transactionService = {
   getTransactions: async () => {
@@ -8,6 +8,11 @@ export const transactionService = {
       "/transaction/get-transaction-by-user-id"
     );
 
+    return res.data;
+  },
+
+  payNow: async (payload: PayNowPayload) => {
+    const res = await http.post<PayNowPayload>("/transaction/send-money", payload);
     return res.data;
   },
 };

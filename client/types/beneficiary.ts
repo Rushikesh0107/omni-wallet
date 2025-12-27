@@ -8,6 +8,6 @@ export type Beneficiary = {
   userId: string;
   name: string;
   phoneNumber: string;
-  createdAt: string; // ISO string from backend
-  updatedAt: string; // ISO string from backend
+  createdAt: string;
+  updatedAt: string;
 };

@@ -1,7 +1,9 @@
+import PayNow from "@/feature/pay-now/pay-now"
+
 const page = () => {
     return (
-        <div>
-            <h1>Pay Now</h1>
+        <div className="w-full h-screen flex items-center justify-center">
+            <PayNow />
         </div>
     )
 }

@@ -22,3 +22,10 @@ export type Transaction = {
   upiInstrument: UPIInstrument | null;
   beneficiary: Beneficiary;
 };
+
+export type PayNowPayload = {
+    amount: string;
+    beneficiaryId: string;
+    cardDetails: string;
+    upiDetails: string;
+}
