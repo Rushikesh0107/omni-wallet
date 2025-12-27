@@ -13,7 +13,7 @@ const Header: React.FC = () => {
             </h1>
           </Link>
         </div>
-
+    
         <Link href="/beneficiary" prefetch={true}>
           <Button
             variant={"outline"}

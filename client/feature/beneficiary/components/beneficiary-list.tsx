@@ -11,17 +11,14 @@ const BeneficiaryList = () => {
     const { data, isLoading } = useGetBeneficiary();
     const dispatch = useAppDispatch();
     
-    // Use useEffect to sync API data to Redux only when data changes
     useEffect(() => {
         if (data) {
             dispatch(setBeneficiaries(data));
         }
     }, [data, dispatch]);
 
-    // Read from the FILTERED list for the UI
     const beneficiaries = useAppSelector((state) => state.beneficiary.filteredBeneficiaries);
 
-    // Helper to get initials for the avatar
     const getInitials = (name: string) => {
         return name
             .split(" ")

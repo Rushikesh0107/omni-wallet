@@ -1,9 +1,17 @@
-const page = () => {
-    return (
-        <div>
-            <h1>Transactions</h1>
-        </div>
-    )
-}
+import { TransactionList, TransactionTools } from "@/feature/transaction";
 
-export default page
+const page = () => {
+  return (
+    <div>
+      <TransactionTools />
+
+      <div className="h-0.5 w-full bg-gray-200" />
+
+      <div className="p-5">
+        <TransactionList />
+      </div>
+    </div>
+  );
+};
+
+export default page;
