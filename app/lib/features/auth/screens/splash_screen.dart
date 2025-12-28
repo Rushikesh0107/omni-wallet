@@ -12,16 +12,10 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(
       builder: (context, auth, _) {
-        
         if (auth.status == AuthStatus.unknown) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return const LoginScreen();
         }
 
-        
         if (auth.status == AuthStatus.authenticated) {
           return const MainShell();
         }

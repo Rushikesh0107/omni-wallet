@@ -1,19 +1,21 @@
-import 'package:app/core/router/app_router.dart';
+import 'package:app/core/storage/cookie_storage.dart';
+import 'package:app/features/home/data/home_api.dart';
+import 'package:app/features/home/data/home_repository.dart';
+import 'package:app/features/home/provider/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'core/dio/dio_client.dart';
+import 'core/router/app_router.dart';
 import 'features/auth/data/auth_api.dart';
 import 'features/auth/data/auth_repository.dart';
 import 'features/auth/provider/auth_provider.dart';
+import 'core/dio/dio_client.dart';
+import 'core/dio/dio_interceptors.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await CookieStorage.init();
 
-  // Initialize Dio singleton
-  DioClient();
-
-  // Auth layer
   final authApi = AuthApi();
   final authRepository = AuthRepository(authApi);
 
@@ -21,7 +23,15 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AuthProvider(authRepository)..init(),
+          create: (context) {
+            final authProvider = AuthProvider(authRepository);
+            DioClient().addInterceptor(AuthInterceptor(authProvider));
+            authProvider.init();
+            return authProvider;
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (_) => HomeProvider(HomeRepository(HomeApi())),
         ),
       ],
       child: const OmniWalletApp(),

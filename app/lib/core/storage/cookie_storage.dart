@@ -1,40 +1,38 @@
-import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
-class DioClient {
-  // Singleton
-  static final DioClient _instance = DioClient._internal();
+class CookieStorage {
+  static PersistCookieJar? _cookieJar;
 
-  late final Dio dio;
-  late final CookieJar cookieJar;
+  /// Call this once during app startup
+  static Future<PersistCookieJar> init() async {
+    if (_cookieJar != null) return _cookieJar!;
 
-  factory DioClient() => _instance;
+    final Directory dir = await getApplicationDocumentsDirectory();
+    final String path = '${dir.path}/cookies';
 
-  DioClient._internal() {
-    cookieJar = CookieJar();
-
-    dio = Dio(
-      BaseOptions(
-        baseUrl: 'https://your-api.com', // move to env later
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
-        sendTimeout: const Duration(seconds: 10),
-
-        // Let the app decide what to do with 4xx / 5xx
-        receiveDataWhenStatusError: true,
-        validateStatus: (_) => true,
-
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ),
+    _cookieJar = PersistCookieJar(
+      storage: FileStorage(path),
     );
 
-    // Attach cookie manager (critical for HTTP-only JWT)
-    dio.interceptors.add(
-      CookieManager(cookieJar),
-    );
+    return _cookieJar!;
+  }
+
+  /// Read-only access after init
+  static PersistCookieJar get jar {
+    if (_cookieJar == null) {
+      throw Exception(
+        'CookieStorage not initialized. Call CookieStorage.init() first.',
+      );
+    }
+    return _cookieJar!;
+  }
+
+  /// Use on logout
+  static Future<void> clear() async {
+    if (_cookieJar != null) {
+      await _cookieJar!.deleteAll();
+    }
   }
 }

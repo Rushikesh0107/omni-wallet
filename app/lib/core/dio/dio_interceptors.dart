@@ -11,7 +11,6 @@ class AuthInterceptor extends Interceptor {
     Response response,
     ResponseInterceptorHandler handler,
   ) {
-    // Backend is the authority: 401 means "you are out"
     if (response.statusCode == 401) {
       authProvider.forceLogout();
     }
@@ -24,7 +23,6 @@ class AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) {
-    // Network errors, timeouts, etc.
     handler.next(err);
   }
 }
