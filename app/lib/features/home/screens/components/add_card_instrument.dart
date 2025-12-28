@@ -181,6 +181,7 @@ class _AddCardInstrumentState extends State<AddCardInstrument> {
                     children: [
                       TextFormField(
                         controller: bankNameController,
+                        keyboardType: TextInputType.text,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
                             RegExp(r'[a-zA-Z\s]'),

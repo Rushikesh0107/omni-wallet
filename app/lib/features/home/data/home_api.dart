@@ -49,8 +49,6 @@ class HomeApi {
     try {
       final response = await _dio.post("/instrument/add-upi", data: data);
 
-      print(response);
-
       _validateResponse(response);
 
       final apiResponse = ApiResponse<UpiInstrument>.fromJson(

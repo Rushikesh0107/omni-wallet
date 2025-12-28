@@ -1,4 +1,7 @@
 import 'package:app/core/storage/cookie_storage.dart';
+import 'package:app/features/beneficiary/data/beneficiary_api.dart';
+import 'package:app/features/beneficiary/provider/beneficiary_provider.dart';
+import 'package:app/features/beneficiary/data/beneficiary_repository.dart';
 import 'package:app/features/home/data/home_api.dart';
 import 'package:app/features/home/data/home_repository.dart';
 import 'package:app/features/home/provider/home_provider.dart';
@@ -32,6 +35,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => HomeProvider(HomeRepository(HomeApi())),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BeneficiaryProvider(BeneficiaryRepository(BeneficiaryApi())),
         ),
       ],
       child: const OmniWalletApp(),

@@ -17,11 +17,11 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeScreen(),
+  final List<Widget> _screens = [
+    const HomeScreen(),
     BeneficiaryScreen(),
-    TransactionsScreen(),
-    SendMoneyScreen(),
+    const TransactionsScreen(),
+    const SendMoneyScreen(),
   ];
 
   @override
