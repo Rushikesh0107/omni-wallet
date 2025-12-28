@@ -20,7 +20,7 @@ class _MainShellState extends State<MainShell> {
   final List<Widget> _screens = [
     const HomeScreen(),
     BeneficiaryScreen(),
-    const TransactionsScreen(),
+    TransactionsScreen(),
     const SendMoneyScreen(),
   ];
 
