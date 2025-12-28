@@ -38,4 +38,19 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> addUpiInstrument(Map<String, String> data) async {
+    loading = true;
+    notifyListeners();
+
+    try{
+      await _repository.addUpiInstrument(data);
+      await fetchUser();
+    }catch(e){
+      error = e.toString();
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
+  }
 }
