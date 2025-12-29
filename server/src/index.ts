@@ -3,18 +3,18 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { connectDB, disconnectDB } from "./prisma";
-import authRouter from "./routes/auth.route"
-import instrumentRouter from "./routes/instrument.route"
-import beneficiaryRouter from "./routes/beneficiary.route"
-import transactionRouter from "./routes/transaction.route"
-import userRouter from "./routes/user.route"
+import authRouter from "./routes/auth.route";
+import instrumentRouter from "./routes/instrument.route";
+import beneficiaryRouter from "./routes/beneficiary.route";
+import transactionRouter from "./routes/transaction.route";
+import userRouter from "./routes/user.route";
 
 dotenv.config();
 
 const app: Express = express();
 
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
+  origin: ["http://localhost:3000", "*"],
   credentials: true,
 };
 
@@ -27,26 +27,24 @@ app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({ message: "Server is running" });
 });
 
-app.use("/api/auth", authRouter)
+app.use("/api/auth", authRouter);
 
-app.use("/api/instrument", instrumentRouter)
+app.use("/api/instrument", instrumentRouter);
 
-app.use("/api/beneficiary", beneficiaryRouter)
+app.use("/api/beneficiary", beneficiaryRouter);
 
-app.use("/api/transaction", transactionRouter)
+app.use("/api/transaction", transactionRouter);
 
 app.use("/api/user", userRouter);
 
 async function startServer() {
   try {
-   
     await connectDB();
 
     const server = app.listen(process.env.PORT || 8080, () => {
       console.log(`Server started on port ${process.env.PORT || 3000}`);
     });
 
-    
     const shutdown = async (code: number) => {
       console.log("Shutting down server...");
       server.close(async () => {

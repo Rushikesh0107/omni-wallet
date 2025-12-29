@@ -3,10 +3,30 @@ import 'package:app/features/transactions/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TransactionsScreen extends StatelessWidget {
-  TransactionsScreen({super.key});
-  
+class TransactionsScreen extends StatefulWidget {
+  const TransactionsScreen({super.key});
+
+  @override
+  State<TransactionsScreen> createState() => _TransactionsScreenState();
+}
+
+class _TransactionsScreenState extends State<TransactionsScreen> {
   final ValueNotifier<String> searchQuery = ValueNotifier('');
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TransactionProvider>().getTransactions();
+    });
+  }
+
+  @override
+  void dispose() {
+    searchQuery.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,15 +34,12 @@ class TransactionsScreen extends StatelessWidget {
 
     return Consumer<TransactionProvider>(
       builder: (context, provider, _) {
-        // 🔔 Snackbar side-effect (runs once per error)
         if (provider.error != null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(provider.error!),
                 backgroundColor: Colors.red.shade600,
-                behavior: SnackBarBehavior.floating,
-                margin: const EdgeInsets.all(16),
               ),
             );
             provider.clearError();
@@ -44,48 +61,38 @@ class TransactionsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _SearchBar(
-                    onChanged: (value) => searchQuery.value = value,
-                  ),
+                  _SearchBar(onChanged: (value) => searchQuery.value = value),
                   const SizedBox(height: 16),
 
-                  if (transactions.isEmpty)
-                    const Expanded(
-                      child: Center(child: Text('No transactions found')),
-                    )
-                  else
-                    Expanded(
-                      child: ValueListenableBuilder<String>(
-                        valueListenable: searchQuery,
-                        builder: (_, query, __) {
-                          final filtered = transactions.where((tx) {
-                            final beneficiary = tx.beneficiary;
-                            final q = query.toLowerCase();
+                  Expanded(
+                    child: ValueListenableBuilder<String>(
+                      valueListenable: searchQuery,
+                      builder: (_, query, __) {
+                        final filtered = transactions.where((tx) {
+                          final q = query.toLowerCase();
+                          return tx.beneficiary.name.toLowerCase().contains(
+                                q,
+                              ) ||
+                              tx.beneficiary.phoneNumber.contains(q) ||
+                              tx.amount.contains(q);
+                        }).toList();
 
-                            return beneficiary.name.toLowerCase().contains(q) ||
-                                beneficiary.phoneNumber.contains(q) ||
-                                tx.amount.contains(q);
-                          }).toList();
-
-                          if (filtered.isEmpty) {
-                            return const Center(
-                              child: Text('No transactions found'),
-                            );
-                          }
-
-                          return ListView.separated(
-                            itemCount: filtered.length,
-                            separatorBuilder: (_, _) =>
-                                const SizedBox(height: 12),
-                            itemBuilder: (_, index) {
-                              return _TransactionTile(
-                                transaction: filtered[index],
-                              );
-                            },
+                        if (filtered.isEmpty) {
+                          return const Center(
+                            child: Text('No transactions found'),
                           );
-                        },
-                      ),
+                        }
+
+                        return ListView.separated(
+                          itemCount: filtered.length,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (_, index) =>
+                              _TransactionTile(transaction: filtered[index]),
+                        );
+                      },
                     ),
+                  ),
                 ],
               ),
             ),
@@ -241,4 +248,3 @@ class _SearchBar extends StatelessWidget {
     );
   }
 }
-

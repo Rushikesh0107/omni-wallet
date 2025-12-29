@@ -21,7 +21,7 @@ class _MainShellState extends State<MainShell> {
     const HomeScreen(),
     BeneficiaryScreen(),
     TransactionsScreen(),
-    const SendMoneyScreen(),
+    SendMoneyScreen(),
   ];
 
   @override

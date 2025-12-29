@@ -29,79 +29,87 @@ class HomeScreen extends StatelessWidget {
         final upiInstruments = user?.upiInstruments;
 
         return Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  AddCardInstrument(cardType: 'credit'),
-                            ),
-                          );
-                        },
-                        child: const Text("+ Credit Card"),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    AddCardInstrument(cardType: 'credit'),
+                              ),
+                            );
+                          },
+                          child: const Text("+ Credit Card"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    AddCardInstrument(cardType: 'debit'),
+                              ),
+                            );
+                          },
+                          child: const Text("+ Debit Card"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    AddUpiInstrument(instrumentType: 'upi'),
+                              ),
+                            );
+                          },
+                          child: const Text("+ UPI"),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    if (cardInstruments != null &&
+                        cardInstruments.isNotEmpty) ...[
+                      const Text(
+                        'Your Cards',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  AddCardInstrument(cardType: 'debit'),
-                            ),
-                          );
-                        },
-                        child: const Text("+ Debit Card"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder:  (_) => AddUpiInstrument(instrumentType: 'upi')));
-                        },
-                        child: const Text("+ UPI"),
+                      const SizedBox(height: 12),
+                      ...cardInstruments.map(
+                        (card) => CardInstrument(card: card),
                       ),
                     ],
-                  ),
 
-                  const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                  if (cardInstruments != null &&
-                      cardInstruments.isNotEmpty) ...[
-                    const Text(
-                      'Your Cards',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    if (upiInstruments != null &&
+                        upiInstruments.isNotEmpty) ...[
+                      const Text(
+                        'UPI',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    ...cardInstruments.map(
-                      (card) => CardInstrument(card: card),
-                    ),
+                      const SizedBox(height: 12),
+                      ...upiInstruments.map((upi) => UpiInstrument(upi: upi)),
+                    ],
                   ],
-
-                  const SizedBox(height: 24),
-
-                  if (upiInstruments != null && upiInstruments.isNotEmpty) ...[
-                    const Text(
-                      'UPI',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    ...upiInstruments.map((upi) => UpiInstrument(upi: upi)),
-                  ],
-                ],
+                ),
               ),
             ),
           ),

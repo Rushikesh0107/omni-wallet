@@ -1,30 +1,30 @@
 import 'package:app/core/dio/dio_client.dart';
-import 'package:app/features/transactions/models/transaction_model.dart';
+import 'package:app/features/send_money/models/send_money_model.dart';
 import 'package:app/shared/models/api_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 
-class TransactionApi {
+class SendMoneyApi {
   final Dio _dio = DioClient().dio;
 
-  Future<List<Transaction>> getTransactions() async {
+  Future<SendMoney> sendMoney(Map<String, dynamic> payload) async {
     try {
-      final response = await _dio.get(
-        "/transaction/get-transaction-by-user-id",
+      print(payload);
+      final response = await _dio.post(
+        "/transaction/send-money",
+        data: payload,
       );
 
       _validateResponse(response);
 
-      final apiResponse = ApiResponse.fromJson(
+      final apiResponse = ApiResponse<SendMoney>.fromJson(
         response.data,
-        (json) => (json as List)
-            .map((t) => Transaction.fromJson(t as Map<String, dynamic>))
-            .toList(),
+        (json) => SendMoney.fromJson(json),
       );
 
       return apiResponse.data;
     } on DioException catch (e) {
-      _handleDioError(e, "Failed to fetch transaction");
+      _handleDioError(e, "Failed to send money");
     }
   }
 

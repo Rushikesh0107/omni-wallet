@@ -5,6 +5,9 @@ import 'package:app/features/beneficiary/data/beneficiary_repository.dart';
 import 'package:app/features/home/data/home_api.dart';
 import 'package:app/features/home/data/home_repository.dart';
 import 'package:app/features/home/provider/home_provider.dart';
+import 'package:app/features/send_money/data/send_money_api.dart';
+import 'package:app/features/send_money/data/send_money_repository.dart';
+import 'package:app/features/send_money/provider/send_money_provider.dart';
 import 'package:app/features/transactions/data/transaction_api.dart';
 import 'package:app/features/transactions/data/transaction_repository.dart';
 import 'package:app/features/transactions/provider/transaction_provider.dart';
@@ -46,6 +49,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) =>
               TransactionProvider(TransactionRepository(TransactionApi())),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SendMoneyProvider(SendMoneyRepository(SendMoneyApi())),
         ),
       ],
       child: const OmniWalletApp(),
