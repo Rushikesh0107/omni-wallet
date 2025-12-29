@@ -7,7 +7,10 @@ class AuthProvider extends ChangeNotifier {
   final AuthRepository _repository;
 
   AuthStatus _status = AuthStatus.unknown;
+  String? _error;
+
   AuthStatus get status => _status;
+  String? get error => _error;
 
   AuthProvider(this._repository);
 
@@ -15,30 +18,42 @@ class AuthProvider extends ChangeNotifier {
     try {
       final isAuth = await _repository.isAuthenticated();
       _status = isAuth ? AuthStatus.authenticated : AuthStatus.unauthenticated;
-    } catch (_) {
+      _error = null;
+    } catch (e) {
       _status = AuthStatus.unauthenticated;
+      _error = e.toString().replaceFirst('Exception: ', '');
     }
     notifyListeners();
   }
 
   Future<void> login({required String email, required String password}) async {
-    await _repository.login(email, password);
-    await init();
+    try {
+      await _repository.login(email, password);
+      await init();
+    } catch (e) {
+      _error = e.toString().replaceFirst('Exception: ', '');
+      _status = AuthStatus.unauthenticated;
+      notifyListeners();
+    }
   }
 
   Future<void> signup({required String email, required String password}) async {
-    await _repository.signup(email, password);
-    await init();
+    try {
+      await _repository.signup(email, password);
+      await init();
+    } catch (e) {
+      _error = e.toString().replaceFirst('Exception: ', '');
+      _status = AuthStatus.unauthenticated;
+      notifyListeners();
+    }
+  }
+
+  void clearError() {
+    _error = null;
   }
 
   Future<void> logout() async {
     await _repository.logout();
-    _status = AuthStatus.unauthenticated;
-    notifyListeners();
-  }
-
-  void forceLogout() {
-    if (_status == AuthStatus.unauthenticated) return;
     _status = AuthStatus.unauthenticated;
     notifyListeners();
   }

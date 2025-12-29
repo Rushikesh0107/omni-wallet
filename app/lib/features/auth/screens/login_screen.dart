@@ -153,6 +153,7 @@ class SignUpForm extends StatelessWidget {
           MaterialPageRoute(builder: (_) => const MainShell()),
         );
       } else {
+        print("inside else");
         _error(context, 'Unable to create account');
       }
     }
@@ -186,6 +187,22 @@ class _AuthForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    String? validateEmail(String? value) {
+      if (value == null || value.trim().isEmpty) {
+        return 'Email required';
+      }
+
+      final email = value.trim();
+
+      final emailRegex = RegExp(r'^[\w\.-]+@([\w-]+\.)+[a-zA-Z]{2,}$');
+
+      if (!emailRegex.hasMatch(email)) {
+        return 'Enter a valid email address';
+      }
+
+      return null;
+    }
+
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Form(
@@ -200,7 +217,7 @@ class _AuthForm extends StatelessWidget {
                 prefixIcon: Icon(Icons.email_outlined),
               ),
               keyboardType: TextInputType.emailAddress,
-              validator: (v) => v!.isEmpty ? 'Email required' : null,
+              validator: (value) => validateEmail(value),
             ),
             const SizedBox(height: 16),
             TextFormField(

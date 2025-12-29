@@ -7,22 +7,16 @@ class AuthInterceptor extends Interceptor {
   AuthInterceptor(this.authProvider);
 
   @override
-  void onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
-  ) {
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (response.statusCode == 401) {
-      authProvider.forceLogout();
+      authProvider.logout();
     }
 
     handler.next(response);
   }
 
   @override
-  void onError(
-    DioException err,
-    ErrorInterceptorHandler handler,
-  ) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     handler.next(err);
   }
 }

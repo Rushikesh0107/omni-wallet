@@ -20,10 +20,13 @@ import 'features/auth/data/auth_repository.dart';
 import 'features/auth/provider/auth_provider.dart';
 import 'core/dio/dio_client.dart';
 import 'core/dio/dio_interceptors.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CookieStorage.init();
+
+  await dotenv.load(fileName: '.env');
 
   final authApi = AuthApi();
   final authRepository = AuthRepository(authApi);
